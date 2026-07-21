@@ -123,9 +123,12 @@ collect_data :: proc() {
 					item := food_map[val]
 					item.total_strength += u16(current_cell.genome.strength)
 					item.competitor_count += 1
+					food_map[val] = item
 					// fmt.printfln("%d targeting %v", idx, current_cell.target_idx)
 				}
 			}
+
+			grid_current[idx] = current_cell
 		}
 	}
 }
@@ -149,7 +152,7 @@ resolve_interactions :: proc() {
 				if !current_cell.alive {
 					next_cell = init_cell(init_genome(.Empty))
 				} else if stats.resource_cnt >= RESOURCE_TO_GRAZER_NEIGHBOR_TRIGGER {
-					next_cell = init_cell(init_genome(.Resource))
+					next_cell = init_cell(init_genome(.Grazer))
 				}
 			case .Grazer:
 				if !current_cell.alive {
@@ -176,7 +179,7 @@ resolve_interactions :: proc() {
 					gain := u16(f32(current_cell.genome.energy_drain) * multiplier)
 
 					next_cell.energy = clamp(
-						current_cell.energy,
+						current_cell.energy + gain,
 						0,
 						current_cell.genome.max_energy,
 					)
@@ -232,5 +235,5 @@ resolve_interactions :: proc() {
 swap :: proc() {
 	temp := grid_current
 	grid_current = grid_next
-	grid_next = grid_current
+	grid_next = temp
 }

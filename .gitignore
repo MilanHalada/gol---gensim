@@ -1,0 +1,14 @@
+gol
+**/.dotnet/
+**/bin/
+**/obj/
+.idea/
+.vs/
+*.user
+*.suo
+*.DotSettings.user
+TestResults/
+coverage/
+appsettings.*.local.json
+.env
+*.log
